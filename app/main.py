@@ -4,11 +4,27 @@ from .logic import generate_bot_response
 from .memory import conversations
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Sports Chatbot")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow frontend to access backend
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/chat")
+async def chat(request: Request):
+    data = await request.json()
+    user_message = data.get("message")
+    reply = f"You said: {user_message}"  # Replace with your model's reply
+    return {"response": reply}
+    
 @app.get("/")
 def serve_frontend():
     return FileResponse("static/index.html")
