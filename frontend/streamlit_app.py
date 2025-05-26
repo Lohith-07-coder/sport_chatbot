@@ -10,7 +10,7 @@ user_input = st.chat_input("Talk sports with me...")
 
 if user_input:
     st.session_state.history.append({"role": "user", "content": user_input})
-    res = requests.post("http://127.0.0.1:8000/chat", json={"message": user_input, "user_id": "fan123"})
+   res = requests.post("https://sports-chatbot-api.onrender.com/chat", json={"message": user_input})
     bot_reply = res.json()["response"]
     st.session_state.history.append({"role": "bot", "content": bot_reply})
 
